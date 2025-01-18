@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Harlow Malloc">
+<meta name="author" content="Mu Ha">
 <meta name="dcterms.date" content="2025-01-15">
 
-<title>Post With Code – Blog</title>
+<title>Random Forest Guide: From Concept to Code – Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -115,7 +149,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Post With Code</h1>
+      <h1 class="title">Random Forest Guide: From Concept to Code</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">news</div>
                 <div class="quarto-category">code</div>
@@ -130,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Harlow Malloc </p>
+               <p>Mu Ha </p>
             </div>
     </div>
       
@@ -156,9 +190,147 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>This is a post with executable code.</p>
+<p>Random Forest is one of the most popular and versatile machine learning algorithms that can be used for any supervised learning tasks. It is a learning technique that involves creating many decision trees and combining their output to improve reliability and reduce overfitting. Many weak decision trees can come up with a smarter and more accurate decision because it is less likely that the majority of the trees are making the same error. Random Forest is so popular because it is suitable for both classification and regression tasks due to its high ability to generalize. It also has high efficiency and simplicity because it is composed of many decision trees and decision trees is one of the simplest algorithm that exists. In this blog, we’ll first understand why we care this algorithm and explore what makes it so powerful. Also, we will dive into its mechanics, and demonstrate its implementation with code. By the end, you’ll have a clear understanding of the algorithm and the confidence to use it in your own projects.</p>
+<section id="why-care-about-random-forest-use-cases-and-relevance" class="level3">
+<h3 class="anchored" data-anchor-id="why-care-about-random-forest-use-cases-and-relevance">Why Care About Random Forest? Use Cases and Relevance</h3>
+<p>Random Forest algorithm is commonly used in various fields, including finance, healthcare, marketing, and more. It is one of the few algorithms that can handle both classification and regression tasks. This versatility is preferred for many projects and scenarios. Some example use cases:</p>
+<ul>
+<li><strong>Healthcare</strong>: Predicting patient outcomes based on medical records.</li>
+<li><strong>Finance</strong>: Credit scoring and fraud detection.</li>
+<li><strong>Marketing</strong>: Customer segmentation and churn prediction.</li>
+<li><strong>Environment</strong>: Forecasting weather patterns or analyzing deforestation.</li>
+</ul>
+<p>The Random Forest algorithm is very robust to noise and overfitting. However, it is not very interpretable because it contains a lot of randomness to diversify the errors each decision tree makes. Therefore, it is more commonly used where interpretability is not the primary concern.</p>
+</section>
+<section id="revisiting-key-concepts-bootstrapping-and-decision-trees" class="level3">
+<h3 class="anchored" data-anchor-id="revisiting-key-concepts-bootstrapping-and-decision-trees">Revisiting Key Concepts: Bootstrapping and Decision Trees</h3>
+<p>To fully understand Random Forest, it’s essential to have a good understanding on the following concepts:</p>
+<ul>
+<li><p><strong>Bootstrapping</strong>: It is a statistical technique used to create multiple subsets of a dataset by randomly sampling with replacement. Each subset, known as a bootstrap sample, is the same size as the original dataset but may contain duplicate records due to the replacement. This method allows algorithms like Random Forest to train multiple decision trees on varied datasets.</p></li>
+<li><p><strong>Decision Trees</strong>: A decision tree makes predictions or decisions by following a specific path baed on the input data. Each internal node represents a test on a feature (e.g., “Is age &gt; 30?”), each branch represents the outcome of the test, and each leaf node represents a final decision or prediction. Decision trees are intuitive and easy to visualize, so they are useful for understanding the decision-making process. However, they can be prone to overfitting, especially when the tree grows too complex by splitting excessively.</p></li>
+</ul>
+</section>
+<section id="the-mechanics-of-random-forest" class="level3">
+<h3 class="anchored" data-anchor-id="the-mechanics-of-random-forest">The Mechanics of Random Forest</h3>
+<p>Random Forest combines the predictions of multiple decision trees to improve accuracy and reduce overfitting. Here’s how it works step-by-step:</p>
+<ol type="1">
+<li><strong>Bootstrap Sampling</strong>:
+<ul>
+<li>Random subsets of the training data are created using bootstrapping.</li>
+<li>Each subset is used to train an individual decision tree.</li>
+</ul></li>
+<li><strong>Feature Randomness</strong>:
+<ul>
+<li>At each split in a tree, only a random subset of features is considered.</li>
+<li>This reduces correlation between trees and increases diversity.</li>
+</ul></li>
+<li><strong>Aggregation</strong>:
+<ul>
+<li>For classification tasks, the final prediction is based on majority voting.</li>
+<li>For regression tasks, the output is the average of the predictions.</li>
+</ul></li>
+</ol>
+<p>The reason Random Forest works well is that it handles each tree to add diversity to the data, features, and error each tree sees. Each tree is trained on a different subset of the data, done by bootstrap sampling. Tree learns different patterns and types of errors. Randomness in feature adds variation by simply restricting split to a random subset of features. This helps trees concentrate on less common aspects of the data, and learn different kinds of error. Key to it is the diversity in errors. Because each tree makes different mistakes, the forest takes care to not fall back into the same errors. When combined these differences are canceled out and greater accuracy is achieved. Together, the trees smooth out individual errors, and capture reliable patterns. Thus, Random forest is less likely to overfit and more robust because of this.</p>
+</section>
+<section id="implementation-random-forest-vs.-decision-tree" class="level3">
+<h3 class="anchored" data-anchor-id="implementation-random-forest-vs.-decision-tree">Implementation: Random Forest vs.&nbsp;Decision Tree</h3>
+<p>Let’s see Random Forest in action and compare it to a single decision tree using Python. We’ll use the <code>scikit-learn</code> library for this demonstration.</p>
+<section id="code-example" class="level4">
+<h4 class="anchored" data-anchor-id="code-example">Code Example</h4>
+<div id="1e20674a" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a synthetic dataset with noise</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">1000</span>,       </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    n_features<span class="op">=</span><span class="dv">20</span>,        </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    n_informative<span class="op">=</span><span class="dv">10</span>,     </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    n_redundant<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    flip_y<span class="op">=</span><span class="fl">0.1</span>,           </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into training and testing sets</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a Decision Tree</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>tree_model <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>tree_model.fit(X_train, y_train)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>tree_preds <span class="op">=</span> tree_model.predict(X_test)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>tree_accuracy <span class="op">=</span> accuracy_score(y_test, tree_preds)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a Random Forest</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>forest_model <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>forest_model.fit(X_train, y_train)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>forest_preds <span class="op">=</span> forest_model.predict(X_test)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>forest_accuracy <span class="op">=</span> accuracy_score(y_test, forest_preds)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Decision Tree Accuracy: </span><span class="sc">{</span>tree_accuracy<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Random Forest Accuracy: </span><span class="sc">{</span>forest_accuracy<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Decision Tree Accuracy: 0.72
+Random Forest Accuracy: 0.87</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="advantages-of-random-forest" class="level3">
+<h3 class="anchored" data-anchor-id="advantages-of-random-forest">Advantages of Random Forest</h3>
+<ol type="1">
+<li><strong>Versatility</strong>:
+<ul>
+<li>Handles both classification and regression tasks.</li>
+<li>Works well with structured and tabular data.</li>
+</ul></li>
+<li><strong>Robustness</strong>:
+<ul>
+<li>Resistant to overfitting due to the ensemble approach.</li>
+<li>Performs well on datasets with missing values and outliers.</li>
+</ul></li>
+<li><strong>Feature Importance</strong>:
+<ul>
+<li>Provides insights into which features are most influential in making predictions.</li>
+</ul></li>
+<li><strong>Parallelization</strong>:
+<ul>
+<li>Training can be parallelized since each tree is built independently.</li>
+</ul></li>
+</ol>
+</section>
+<section id="challenges-and-limitations" class="level3">
+<h3 class="anchored" data-anchor-id="challenges-and-limitations">Challenges and Limitations</h3>
+<ol type="1">
+<li><strong>Interpretability</strong>:
+<ul>
+<li>While decision trees are interpretable, Random Forests are more complex and function as a “black box.”</li>
+</ul></li>
+<li><strong>Computational Cost</strong>:
+<ul>
+<li>Building multiple trees can be resource-intensive, especially with large datasets.</li>
+</ul></li>
+<li><strong>Overfitting with Large Forests</strong>:
+<ul>
+<li>Although rare, an excessively large number of trees can lead to diminishing returns in performance.</li>
+</ul></li>
+<li><strong>Bias in Imbalanced Data</strong>:
+<ul>
+<li>Random Forest may struggle with datasets where one class is significantly underrepresented.</li>
+</ul></li>
+</ol>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>Random Forest is a powerful algorithm that combines simplicity with performance. Its ability to handle a variety of tasks, resist overfitting, and provide feature importance insights makes it a must-have in your machine learning toolkit. In this blog, we explored its structure, provided a practical implementation, and highlighted its strengths and weaknesses.</p>
+<p>Whether you’re a beginner or a seasoned practitioner, Random Forest is a reliable choice for many machine learning problems. Try implementing it in your next project and experience its benefits firsthand!</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
