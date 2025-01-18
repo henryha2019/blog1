@@ -237,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s see Random Forest in action and compare it to a single decision tree using Python. We’ll use the <code>scikit-learn</code> library for this demonstration.</p>
 <section id="code-example" class="level4">
 <h4 class="anchored" data-anchor-id="code-example">Code Example</h4>
-<div id="1e20674a" class="cell" data-execution_count="1">
+<div id="6a8cc2bd" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
@@ -306,22 +306,10 @@ Random Forest Accuracy: 0.87</code></pre>
 <section id="challenges-and-limitations" class="level3">
 <h3 class="anchored" data-anchor-id="challenges-and-limitations">Challenges and Limitations</h3>
 <ol type="1">
-<li><strong>Interpretability</strong>:
-<ul>
-<li>While decision trees are interpretable, Random Forests are more complex and function as a “black box.”</li>
-</ul></li>
-<li><strong>Computational Cost</strong>:
-<ul>
-<li>Building multiple trees can be resource-intensive, especially with large datasets.</li>
-</ul></li>
-<li><strong>Overfitting with Large Forests</strong>:
-<ul>
-<li>Although rare, an excessively large number of trees can lead to diminishing returns in performance.</li>
-</ul></li>
-<li><strong>Bias in Imbalanced Data</strong>:
-<ul>
-<li>Random Forest may struggle with datasets where one class is significantly underrepresented.</li>
-</ul></li>
+<li><p><strong>Interpretability</strong>: Individual decision trees are straightforward to understand but they are very randomized in the Random Forest algorithm. Random Forest also combines them, making it even harder to interpret as a whole. This reduces its transparency and makes it more like a “black box.”</p></li>
+<li><p><strong>Computational Cost</strong>: Training multiple trees can be computationally expensive, especially for large datasets with many features. Trees are also often very deep in Random Forest as each tree should make reasonable predictions. Memory usage can also be a concern when scaling to very large forests.</p></li>
+<li><p><strong>Overfitting with Large Forests</strong>: Although Random Forest is designed to reduce overfitting, models that are overly complex can still overfit, with little improvement in accuracy while increasing computational costs.</p></li>
+<li><p><strong>Bias in Imbalanced Data</strong>: Random Forest can struggle with imbalanced datasets. In such cases, the algorithm might favor the majority class, leading to biased predictions. This is only solvable with additional techniques, such as class weighting or resampling.</p></li>
 </ol>
 </section>
 <section id="conclusion" class="level3">
